@@ -3,6 +3,7 @@ package main
 // #cgo LDFLAGS: -ldl
 // #include <dlfcn.h>
 // #include <sys/types.h>
+// #include <stdlib.h>
 // #include <errno.h>
 //
 // int
@@ -57,6 +58,7 @@ import (
 	"os"
 	"strings"
 	"syscall"
+	"unsafe"
 )
 
 func runningFromUnitFile() (ret bool, err error) {
@@ -89,6 +91,7 @@ func runningFromUnitFile() (ret bool, err error) {
 		return
 	}
 	var unit *C.char
+	defer C.free(unsafe.Pointer(unit))
 	unit_errno := C.my_sd_pid_get_unit(sd_pid_get_unit, 0, &unit)
 	fmt.Printf("sd_pid_get_unit: %v, %v\n", syscall.Errno(-unit_errno), C.GoString(unit))
 
@@ -98,6 +101,7 @@ func runningFromUnitFile() (ret bool, err error) {
 		return
 	}
 	var user_unit *C.char
+	defer C.free(unsafe.Pointer(user_unit))
 	user_unit_errno := C.my_sd_pid_get_user_unit(sd_pid_get_user_unit, 0, &user_unit)
 	fmt.Printf("sd_pid_get_user_unit: %v, %v\n", syscall.Errno(-user_unit_errno), C.GoString(user_unit))
 
@@ -107,6 +111,7 @@ func runningFromUnitFile() (ret bool, err error) {
 		return
 	}
 	var session *C.char
+	defer C.free(unsafe.Pointer(session))
 	session_errno := C.my_sd_pid_get_session(sd_pid_get_session, 0, &session)
 	fmt.Printf("sd_pid_get_session: %v, %v\n", syscall.Errno(-session_errno), C.GoString(session))
 
@@ -116,6 +121,7 @@ func runningFromUnitFile() (ret bool, err error) {
 		return
 	}
 	var slice *C.char
+	defer C.free(unsafe.Pointer(slice))
 	slice_errno := C.my_sd_pid_get_slice(sd_pid_get_slice, 0, &slice)
 	fmt.Printf("sd_pid_get_slice: %v, %v\n", syscall.Errno(-slice_errno), C.GoString(slice))
 
