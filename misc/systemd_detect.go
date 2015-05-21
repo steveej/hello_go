@@ -64,7 +64,7 @@ func runningFromUnitFile() (ret bool, err error) {
 	if handle == nil {
 		// we can't open libsystemd-login.so so we assume systemd is not
 		// installed and we're not running from a unit file
-		fmt.Printf("libsystemd.so not found")
+		fmt.Println("libsystemd.so not found")
 		ret = false
 		return
 	}
