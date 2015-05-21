@@ -56,7 +56,6 @@ import "C"
 import (
 	"fmt"
 	"os"
-	"strings"
 	"unsafe"
 )
 
@@ -124,7 +123,7 @@ func runningFromUnitFile() (ret bool, err error) {
 	slice_errno := C.my_sd_pid_get_slice(sd_pid_get_slice, 0, &slice)
 	fmt.Printf("sd_pid_get_slice: %v, %v\n", slice_errno, C.GoString(slice))
 
-	ret = strings.HasSuffix(C.GoString(unit), ".service")
+	ret = C.GoString(slice) == "system.service"
 	return
 }
 
