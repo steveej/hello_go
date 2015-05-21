@@ -57,7 +57,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"syscall"
 	"unsafe"
 )
 
@@ -83,7 +82,7 @@ func runningFromUnitFile() (ret bool, err error) {
 	}
 	var uid C.uid_t
 	uid_errno := C.my_sd_pid_get_owner_uid(sd_pid_get_owner_uid, 0, &uid)
-	fmt.Printf("sd_pid_get_owner_uid: %v, %v\n", syscall.Errno(-uid_errno), uid)
+	fmt.Printf("sd_pid_get_owner_uid: %v, %v\n", uid_errno, uid)
 
 	sd_pid_get_unit := C.dlsym(handle, C.CString("sd_pid_get_unit"))
 	if sd_pid_get_unit == nil {
@@ -93,7 +92,7 @@ func runningFromUnitFile() (ret bool, err error) {
 	var unit *C.char
 	defer C.free(unsafe.Pointer(unit))
 	unit_errno := C.my_sd_pid_get_unit(sd_pid_get_unit, 0, &unit)
-	fmt.Printf("sd_pid_get_unit: %v, %v\n", syscall.Errno(-unit_errno), C.GoString(unit))
+	fmt.Printf("sd_pid_get_unit: %v, %v\n", unit_errno, C.GoString(unit))
 
 	sd_pid_get_user_unit := C.dlsym(handle, C.CString("sd_pid_get_user_unit"))
 	if sd_pid_get_user_unit == nil {
@@ -103,7 +102,7 @@ func runningFromUnitFile() (ret bool, err error) {
 	var user_unit *C.char
 	defer C.free(unsafe.Pointer(user_unit))
 	user_unit_errno := C.my_sd_pid_get_user_unit(sd_pid_get_user_unit, 0, &user_unit)
-	fmt.Printf("sd_pid_get_user_unit: %v, %v\n", syscall.Errno(-user_unit_errno), C.GoString(user_unit))
+	fmt.Printf("sd_pid_get_user_unit: %v, %v\n", user_unit_errno, C.GoString(user_unit))
 
 	sd_pid_get_session := C.dlsym(handle, C.CString("sd_pid_get_session"))
 	if sd_pid_get_session == nil {
@@ -113,7 +112,7 @@ func runningFromUnitFile() (ret bool, err error) {
 	var session *C.char
 	defer C.free(unsafe.Pointer(session))
 	session_errno := C.my_sd_pid_get_session(sd_pid_get_session, 0, &session)
-	fmt.Printf("sd_pid_get_session: %v, %v\n", syscall.Errno(-session_errno), C.GoString(session))
+	fmt.Printf("sd_pid_get_session: %v, %v\n", session_errno, C.GoString(session))
 
 	sd_pid_get_slice := C.dlsym(handle, C.CString("sd_pid_get_slice"))
 	if sd_pid_get_slice == nil {
@@ -123,7 +122,7 @@ func runningFromUnitFile() (ret bool, err error) {
 	var slice *C.char
 	defer C.free(unsafe.Pointer(slice))
 	slice_errno := C.my_sd_pid_get_slice(sd_pid_get_slice, 0, &slice)
-	fmt.Printf("sd_pid_get_slice: %v, %v\n", syscall.Errno(-slice_errno), C.GoString(slice))
+	fmt.Printf("sd_pid_get_slice: %v, %v\n", slice_errno, C.GoString(slice))
 
 	ret = strings.HasSuffix(C.GoString(unit), ".service")
 	return
