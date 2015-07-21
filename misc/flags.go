@@ -46,7 +46,21 @@ func filterFiles(strings []string, keepPattern string) ([]string, error) {
 	return new_strings, nil
 }
 
+type boolStringFlags string
+
+func (i *boolStringFlags) String() string {
+	return string(*i)
+}
+func (i *boolStringFlags) Set(value string) error {
+	fmt.Println("Setting ", value)
+	*i = boolStringFlags(value)
+	return nil
+}
+
+func (i *boolStringFlags) IsBoolFlag() bool { return true }
+
 var pattern, dir string
+var myFlags boolStringFlags
 
 func init() {
 	const (
@@ -57,10 +71,14 @@ func init() {
 	)
 	flag.StringVar(&pattern, "pattern", patternDefault, patternHelp)
 	flag.StringVar(&dir, "dir", dirDefault, dirHelp)
+
+	flag.Var(&myFlags, "list1", "Some description for this param.")
 }
 
 func main() {
 	flag.Parse()
+
+	fmt.Println(myFlags)
 
 	files, err := listFiles(dir)
 	if err != nil {
