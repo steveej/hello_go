@@ -89,12 +89,12 @@ func funcName(f interface{}) string {
 			return rf.Name()
 		}
 	}
-	return ""
+	return nil
 }
 
 func main() {
 	pid := os.Getpid()
-	cleanup := false
+	cleanup := true
 	for _, f := range funcs {
 		fmt.Printf("=== Testing function %v\n", funcName(f))
 		t0 := time.Now()
