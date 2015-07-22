@@ -41,7 +41,7 @@ func main() {
 		stringSet.Insert(s)
 	}
 	fmt.Println(stringSet)
-	for _, s := range stringSet {
-		fmt.Println(s)
+	for k, v := range stringSet.m {
+		fmt.Println(k, v)
 	}
 }
