@@ -1,0 +1,6 @@
+package: .
+import:
+- package: github.com/opencontainers/runc
+  version: ^1.0.0-rc2
+  subpackages:
+  - libcontainer/system
